@@ -18,6 +18,22 @@ exports.getCustomers = (req, res, next) => {
 
 }
 
+exports.getCustomer = (req, res, next) => {
+    const userId = req.params.userId; // se obtiene el ID de la URL dinamica /customers/:userId
+    sequelize.query('CALL getCustomer(:p_id)', { replacements: { p_id: userId } })
+        .then(rows => {
+            console.log(rows);
+            res.status(200).json({ customer: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
+
 exports.putCustomer = (req, res, next) => {
     const userId = req.params.userId; // se obtiene el ID de la URL dinamica /customers/:userId
     const [newEmail, newName, newLastName] = [req.body.newEmail, req.body.newName, req.body.newLastName];
@@ -66,7 +82,7 @@ exports.deleteCustomer = (req, res, next) => {
         })
         .then(result => {
             console.log(result);
-            res.status(201).json({ resultado: 'Usuario Eliminado' }); // 201 es el codigo correcto en PUT
+            res.status(201).json({ resultado: 'Usuario Eliminado' });
         })
         .catch(err => {
             if (!err.statusCode) {
