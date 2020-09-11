@@ -17,4 +17,12 @@ router.post('/products', adminController.postProduct);
 router.put('/products/:productId', adminController.putProduct);
 router.delete('/products/:productId', adminController.deleteProduct);
 
+// CRUD Mesas
+router.get('/tables', adminController.getTables);
+router.get('/tables/:tableId', adminController.getTable);
+router.post('/tables', adminController.postTable);
+router.put('/tables/:tableId', adminController.putTable);
+router.delete('/tables/:tableId', adminController.deleteTable);
+
+
 module.exports = router;

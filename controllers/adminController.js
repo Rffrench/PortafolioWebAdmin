@@ -2,6 +2,7 @@
 
 const sequelize = require('../util/database');
 const Product = require('../models/productsModel');
+const Table = require('../models/tablesModel'); // must be imported or it wont work
 
 
 // CLIENTES
@@ -213,6 +214,122 @@ exports.deleteProduct = (req, res, next) => {
         .then(result => {
             console.log(result);
             res.status(201).json({ resultado: 'Producto Eliminado' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+
+
+
+
+
+
+// MESAS
+
+exports.getTables = (req, res, next) => {
+    sequelize.query('CALL getTables()')
+        .then(rows => {
+            if (rows.length === 0) {
+                const error = new Error('No Tables Found');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(rows);
+            res.status(200).json({ tables: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.getTable = (req, res, next) => {
+    const tableId = req.params.tableId;
+    sequelize.query('CALL getTable(:p_id)', { replacements: { p_id: tableId } })
+        .then(rows => {
+            if (rows.length === 0) {
+                const error = new Error('No Tables Found');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(rows);
+            res.status(200).json({ table: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
+
+exports.postTable = (req, res, next) => {
+    const [capacity, isAvailable] = [req.body.capacity, req.body.isAvailable];
+
+    sequelize.query('CALL addTable(:p_capacity, :p_isAvailable)', { replacements: { p_capacity: capacity, p_isAvailable: isAvailable } })
+        .then(result => {
+            res.status(201).json({ result: 'Mesa Insertada' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.putTable = (req, res, next) => {
+    const tableId = req.params.tableId;
+    const [capacity, isAvailable, userId] = [req.body.capacity, req.body.isAvailable, req.body.userId || null]; // puede venir sin id de usuario para actualizar, se deja nulo en ese caso
+
+
+
+    sequelize.query('CALL getTable(:p_id)', { replacements: { p_id: tableId } })
+        .then(row => {
+            if (row.length === 0) {
+                const error = new Error('Mesa no encontrada');
+                error.statusCode = 404;
+                throw error;
+            }
+
+            return sequelize.query('CALL updateTable(:p_id, :p_capacity, :p_isAvailable, :p_userId)', { replacements: { p_id: tableId, p_capacity: capacity, p_isAvailable: isAvailable, p_userId: userId } })
+        })
+        .then(result => {
+            res.status(201).json({ result: 'Mesa Actualizada' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.deleteTable = (req, res, next) => {
+    const tableId = req.params.tableId;
+
+
+    sequelize.query('CALL getTable(:p_id)', { replacements: { p_id: tableId } })
+        .then(row => {
+            if (row.length === 0) {
+                const error = new Error('Mesa no encontrada');
+                error.statusCode = 404;
+                throw error;
+            }
+
+            return sequelize.query('CALL deleteTable(:p_id)', { replacements: { p_id: tableId } })
+        })
+        .then(result => {
+            console.log(result);
+            res.status(201).json({ resultado: 'Mesa Eliminada' });
         })
         .catch(err => {
             if (!err.statusCode) {
