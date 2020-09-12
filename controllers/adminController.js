@@ -288,7 +288,6 @@ exports.postTable = (req, res, next) => {
 
 exports.putTable = (req, res, next) => {
     const tableId = req.params.tableId;
-    const [capacity, isAvailable, userId] = [req.body.capacity, req.body.isAvailable, req.body.userId || null]; // puede venir sin id de usuario para actualizar, se deja nulo en ese caso
 
 
 
@@ -299,6 +298,8 @@ exports.putTable = (req, res, next) => {
                 error.statusCode = 404;
                 throw error;
             }
+            const [capacity, isAvailable, userId] = [req.body.capacity || row[0].capacity, req.body.isAvailable || row[0].isAvailable, req.body.userId || row[0].userId]; // Si no vienen todos los campos en el request para actualizar entonces se extraen los datos ya guardados en la tabla para pasarselos al procedimiento y asi no modificar los ya existentes con nulos
+
 
             return sequelize.query('CALL updateTable(:p_id, :p_capacity, :p_isAvailable, :p_userId)', { replacements: { p_id: tableId, p_capacity: capacity, p_isAvailable: isAvailable, p_userId: userId } })
         })
