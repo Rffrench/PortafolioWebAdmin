@@ -272,9 +272,9 @@ exports.getTable = (req, res, next) => {
 }
 
 exports.postTable = (req, res, next) => {
-    const [capacity, isAvailable] = [req.body.capacity, req.body.isAvailable];
+    const capacity = req.body.capacity;
 
-    sequelize.query('CALL addTable(:p_capacity, :p_isAvailable)', { replacements: { p_capacity: capacity, p_isAvailable: isAvailable } })
+    sequelize.query('CALL addTable(:p_capacity)', { replacements: { p_capacity: capacity } })
         .then(result => {
             res.status(201).json({ result: 'Mesa Insertada' });
         })
@@ -285,7 +285,7 @@ exports.postTable = (req, res, next) => {
             next(err);
         })
 }
-
+// Modificar mesa y ademas modificar disponibilidad
 exports.putTable = (req, res, next) => {
     const tableId = req.params.tableId;
 
@@ -298,10 +298,14 @@ exports.putTable = (req, res, next) => {
                 error.statusCode = 404;
                 throw error;
             }
-            const [capacity, isAvailable, userId] = [req.body.capacity || row[0].capacity, req.body.isAvailable || row[0].isAvailable, req.body.userId || row[0].userId]; // Si no vienen todos los campos en el request para actualizar entonces se extraen los datos ya guardados en la tabla para pasarselos al procedimiento y asi no modificar los ya existentes con nulos
+
+            // Si no vienen todos los campos en el request para actualizar entonces se extraen los datos ya guardados en la tabla para pasarselos al procedimiento y asi no modificar los ya existentes con nulos. Excepto los IDs porque se usa para asignar mesas esto
+            const capacity = (req.body.capacity !== null && req.body.capacity !== undefined) ? req.body.capacity : row[0].capacity;
+            const customerId = req.body.customerId
+            const waiterId = req.body.waiterId
 
 
-            return sequelize.query('CALL updateTable(:p_id, :p_capacity, :p_isAvailable, :p_userId)', { replacements: { p_id: tableId, p_capacity: capacity, p_isAvailable: isAvailable, p_userId: userId } })
+            return sequelize.query('CALL updateTable(:p_id, :p_capacity, :p_customerId, :p_waiterId)', { replacements: { p_id: tableId, p_capacity: capacity, p_customerId: customerId, p_waiterId: waiterId } })
         })
         .then(result => {
             res.status(201).json({ result: 'Mesa Actualizada' });
