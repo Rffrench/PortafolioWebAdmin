@@ -3,6 +3,7 @@
 const sequelize = require('../util/database');
 const Product = require('../models/productsModel');
 const Table = require('../models/tablesModel'); // must be imported or it wont work
+const Recipe = require('../models/recipesModel');
 
 
 // CLIENTES
@@ -335,6 +336,102 @@ exports.deleteTable = (req, res, next) => {
         .then(result => {
             console.log(result);
             res.status(201).json({ resultado: 'Mesa Eliminada' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+// Recetas
+
+
+
+exports.getRecipes = (req, res, next) => {
+    sequelize.query('CALL getRecipes()')
+        .then(rows => {
+            if (rows.length === 0) {
+                const error = new Error('No se encontraron recetas.');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(rows);
+            res.status(200).json({ recipes: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+
+exports.postRecipe  = (req, res, next) => {
+    const [name, description, cookingTime, userId] = [req.body.name, req.body.description, req.body.cookingTime, req.body.userId];
+
+    sequelize.query('CALL addRecipe(:p_name, :p_description, :p_cookingTime, :p_userId)', { replacements: { p_name: name, p_description:description, p_cookingTime:cookingTime, p_userId:userId } })
+        .then(result => {
+            res.status(201).json({ result: 'Receta agregada exitosamente' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.putRecipe = (req, res, next) => {
+    const recipeId = req.params.recipeId; 
+    const [name, description, cookingTime] = [req.body.name, req.body.description, req.body.cookingTime];
+
+
+  
+    sequelize.query('CALL getRecipe(:p_id)', { replacements: { p_id: recipeId } })
+        .then(row => {
+            if (row.length === 0) { 
+                const error = new Error('Receta no encontrada');
+                error.statusCode = 404;
+                throw error;
+            }
+
+            return sequelize.query('CALL updateRecipe(:p_id, :p_name, :p_description, :p_cookingTime)', { replacements: { p_id: recipeId, p_name: name, p_description: description, p_cookingTime:cookingTime } })
+        })
+        .then(result => {
+            res.status(201).json({ result: 'Receta Actualizada' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+
+
+
+
+exports.deleteRecipe = (req, res, next) => {
+    const recipeId = req.params.recipeId;
+
+
+    sequelize.query('CALL getRecipe(:p_id)', { replacements: { p_id: recipeId } })
+        .then(row => {
+            if (row.length === 0) {
+                const error = new Error('Receta no encontrada');
+                error.statusCode = 404;
+                throw error;
+            }
+
+            return sequelize.query('CALL deleteRecipe(:p_id)', { replacements: { p_id: recipeId } })
+        })
+        .then(result => {
+            console.log(result);
+            res.status(201).json({ resultado: 'Receta Eliminada' });
         })
         .catch(err => {
             if (!err.statusCode) {
