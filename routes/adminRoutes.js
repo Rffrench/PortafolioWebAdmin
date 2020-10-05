@@ -24,5 +24,10 @@ router.post('/tables', adminController.postTable);
 router.put('/tables/:tableId', adminController.putTable);
 router.delete('/tables/:tableId', adminController.deleteTable);
 
+// CRUD Recetas
+router.post('/recipes',adminController.postRecipe);
+router.get('/recipes',adminController.getRecipes);
+router.put('/recipes/:recipeId',adminController.putRecipe);
+router.delete('/recipes/:recipeId',adminController.deleteRecipe);
 
 module.exports = router;
