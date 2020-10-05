@@ -300,6 +300,7 @@ exports.putTable = (req, res, next) => {
             }
 
             // Si no vienen todos los campos en el request para actualizar entonces se extraen los datos ya guardados en la tabla para pasarselos al procedimiento y asi no modificar los ya existentes con nulos. Excepto los IDs porque se usa para asignar mesas esto
+            // se deja asi ya q la capacidad no se deberia actualizar si la mesa esta asignada
             const capacity = (req.body.capacity !== null && req.body.capacity !== undefined) ? req.body.capacity : row[0].capacity;
             const customerId = req.body.customerId
             const waiterId = req.body.waiterId
