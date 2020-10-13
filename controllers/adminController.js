@@ -4,6 +4,53 @@ const sequelize = require('../util/database');
 const Product = require('../models/productsModel');
 const Table = require('../models/tablesModel'); // must be imported or it wont work
 const Recipe = require('../models/recipesModel');
+const InventoryOrderStatus = require('../models/inventoryOrderStatusModel');
+const InventoryOrders = require('../models/inventoryOrdersModel');
+const InventoryOrderProducts = require('../models/inventoryOrderProductsModel');
+const ProductCategories = require('../models/productCategoriesModel');
+
+
+
+// Ordenes de inventario
+
+exports.getInventoryOrders = (req, res, next) => {
+    sequelize.query('CALL getInventoryOrders()')
+        .then(rows => {
+            if (rows.length === 0) { 
+                const error = new Error('No existen ordenes de inventario');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(rows);
+            res.status(200).json({ inventoryOrders: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
+
+exports.postInventoryOrders = (req, res, next) => {
+    const [description, warehouseId] = [req.body.description, req.body.warehouseId];
+
+    sequelize.query('CALL addInventoryOrder(:p_description, :p_warehouseId)', { replacements: { p_description: description, p_warehouseId: warehouseId } })
+        .then(result => {
+            res.status(201).json({ result: 'Orden de inventario creada.' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+
+
+
 
 
 // CLIENTES

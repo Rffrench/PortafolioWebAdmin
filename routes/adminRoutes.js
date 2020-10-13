@@ -30,4 +30,9 @@ router.get('/recipes',adminController.getRecipes);
 router.put('/recipes/:recipeId',adminController.putRecipe);
 router.delete('/recipes/:recipeId',adminController.deleteRecipe);
 
+// CRUD  Ordenes de inventario
+
+router.get('/inventoryOrders',adminController.getInventoryOrders);
+router.post('/inventoryOrders',adminController.postInventoryOrders);
+
 module.exports = router;

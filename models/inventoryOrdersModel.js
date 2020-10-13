@@ -1,31 +1,33 @@
 const Sequelize = require('sequelize');
-
 const sequelize = require('../util/database');
 
-const Product = sequelize.define('Product', {
+const InventoryOrders = sequelize.define('InventoryOrders', {
     id: {
         type: Sequelize.INTEGER,
-        autoIncrement: true,
         allowNull: false,
+        autoIncrement: true,
         primaryKey: true
     },
-    name: {
+    description: {
         type: Sequelize.STRING,
         allowNull: false
     },
-    quantity: {
-        type: Sequelize.INTEGER,
-        allowNull: false
-    },
-    categoryId: {
+    warehouseId: { // FK
         type: Sequelize.INTEGER,
         references: {
-            model: 'ProductCategories',
+            model: 'Users',
             key: 'id'
-        }    
-        
+        }
     }
+    ,
+    statusId: { // FK
+        type: Sequelize.INTEGER,
+        references: {
+            model: 'InventoryOrderStatuses',
+            key: 'id'
+        }
+    }
+    })
+  
 
-})
-
-module.exports = Product;
+module.exports = InventoryOrders;
