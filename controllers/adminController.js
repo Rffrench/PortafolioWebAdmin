@@ -4,10 +4,6 @@ const sequelize = require('../util/database');
 const Product = require('../models/productsModel');
 const Table = require('../models/tablesModel'); // must be imported or it wont work
 const Recipe = require('../models/recipesModel');
-const InventoryOrderStatus = require('../models/inventoryOrderStatusModel');
-const InventoryOrders = require('../models/inventoryOrdersModel');
-const InventoryOrderProducts = require('../models/inventoryOrderProductsModel');
-const ProductCategories = require('../models/productCategoriesModel');
 
 
 
