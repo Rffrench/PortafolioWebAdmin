@@ -35,4 +35,9 @@ router.delete('/recipes/:recipeId',adminController.deleteRecipe);
 router.get('/inventoryOrders',adminController.getInventoryOrders);
 router.post('/inventoryOrders',adminController.postInventoryOrders);
 
+
+// Productos de ordenes
+router.get('/order-products/:order',adminController.getOrderProducts);
+router.put('/order-products/:order',adminController.putOrderStatus);
+router.delete('/order-products/:order/:product',adminController.deleteOrderProduct);
 module.exports = router;

@@ -6,6 +6,62 @@ const Table = require('../models/tablesModel'); // must be imported or it wont w
 const Recipe = require('../models/recipesModel');
 
 
+// Productos de Ordenes
+exports.deleteOrderProduct = (req, res, next) => {
+    const order = req.params.order; // se obtiene el ID de la URL dinamica /customers/:userId
+    const product = req.params.product;
+
+    sequelize.query('CALL deleteOrderProduct(:p_order, :p_product)', { replacements: { p_order: order, p_product:product} })        
+    .then(result => {
+        console.log(result);
+        res.status(201).json({ resultado: 'Producto eliminado de la orden' });
+    })
+    .catch(err => {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    })
+}
+
+
+exports.getOrderProducts = (req, res, next) => {
+    const  order = req.params.order;
+ 
+    sequelize.query('CALL getOrderProducts(:p_order)',{replacements: { p_order : order}})
+        .then(rows => {
+            if (rows.length === 0) { 
+                const error = new Error('No hay productos asignados a esta orden');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(rows);
+            res.status(200).json({ OrderProducts: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
+
+exports.putOrderStatus = (req, res, next) => {
+    const  order = req.params.order;
+ 
+    sequelize.query('CALL sendToAdmin(:p_order)',{replacements: { p_order : order}})
+    .then(result => {
+        res.status(201).json({ result: 'Orden de inventario actualizada.' });
+    })
+    .catch(err => {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    })
+}
+
 
 // Ordenes de inventario
 
