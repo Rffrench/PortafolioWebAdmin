@@ -7,6 +7,23 @@ const Recipe = require('../models/recipesModel');
 
 
 // Productos de Ordenes
+
+exports.postOrderProduct = (req, res, next) => {
+    const [order, product, quantity] = [req.body.order,req.body.product, req.body.quantity];
+
+    sequelize.query('CALL addInventoryOrderProduct(:p_order,:p_product, :p_quantity)', { replacements: { p_order: order,p_product:product, p_quantity: quantity } })
+        .then(result => {
+            res.status(201).json({ result: 'Producto Insertado' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+
 exports.deleteOrderProduct = (req, res, next) => {
     const order = req.params.order; // se obtiene el ID de la URL dinamica /customers/:userId
     const product = req.params.product;
@@ -30,11 +47,7 @@ exports.getOrderProducts = (req, res, next) => {
  
     sequelize.query('CALL getOrderProducts(:p_order)',{replacements: { p_order : order}})
         .then(rows => {
-            if (rows.length === 0) { 
-                const error = new Error('No hay productos asignados a esta orden');
-                error.statusCode = 404;
-                throw error;
-            }
+            
             console.log(rows);
             res.status(200).json({ OrderProducts: rows });
         })
