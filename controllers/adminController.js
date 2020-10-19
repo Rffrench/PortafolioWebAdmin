@@ -7,7 +7,22 @@ const Recipe = require('../models/recipesModel');
 
 
 // Productos de Ordenes
+exports.putOrderProduct = (req, res, next) => {
+    const [order, product, quantity] = [req.body.order,req.body.product, req.body.quantity];
 
+    sequelize.query('CALL updateProductQuantity(:p_order,:p_product, :p_quantity)', { replacements: { p_order: order,p_product:product, p_quantity: quantity } })
+        .then(result => {
+            res.status(201).json({ result: 'Producto de orden actualizado' });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+
+}
 exports.postOrderProduct = (req, res, next) => {
     const [order, product, quantity] = [req.body.order,req.body.product, req.body.quantity];
 

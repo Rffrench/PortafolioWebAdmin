@@ -37,6 +37,7 @@ router.post('/inventoryOrders',adminController.postInventoryOrders);
 
 
 // Productos de ordenes
+router.put('/order-products/update', adminController.putOrderProduct);
 router.post('/order-products/new',adminController.postOrderProduct);
 router.get('/order-products/:order',adminController.getOrderProducts);
 router.put('/order-products/:order',adminController.putOrderStatus);
