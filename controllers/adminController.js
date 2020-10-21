@@ -92,6 +92,26 @@ exports.putOrderStatus = (req, res, next) => {
 
 
 // Ordenes de inventario
+exports.getInventoryOrder = (req, res, next) => {
+    const order = req.params.order;
+    sequelize.query('CALL getInventoryOrder(:p_order)',  { replacements: { p_order: order } })
+        .then(result => {
+            if (result.length === 0) { 
+                const error = new Error('No existe la orden');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(result);
+            res.status(200).json({ inventoryOrder: result });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
 
 exports.getInventoryOrders = (req, res, next) => {
     sequelize.query('CALL getInventoryOrders()')
@@ -118,7 +138,7 @@ exports.postInventoryOrders = (req, res, next) => {
 
     sequelize.query('CALL addInventoryOrder(:p_description, :p_warehouseId)', { replacements: { p_description: description, p_warehouseId: warehouseId } })
         .then(result => {
-            res.status(201).json({ result: 'Orden de inventario creada.' });
+            res.status(201).json({ result: result });
         })
         .catch(err => {
             if (!err.statusCode) {
