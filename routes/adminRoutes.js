@@ -24,23 +24,4 @@ router.post('/tables', adminController.postTable);
 router.put('/tables/:tableId', adminController.putTable);
 router.delete('/tables/:tableId', adminController.deleteTable);
 
-// CRUD Recetas
-router.post('/recipes',adminController.postRecipe);
-router.get('/recipes',adminController.getRecipes);
-router.put('/recipes/:recipeId',adminController.putRecipe);
-router.delete('/recipes/:recipeId',adminController.deleteRecipe);
-
-// CRUD  Ordenes de inventario
-
-router.get('/inventoryOrders/:user',adminController.getInventoryOrders);
-router.get('/inventoryOrder/:order',adminController.getInventoryOrder);
-router.post('/inventoryOrders',adminController.postInventoryOrders);
-
-
-// Productos de ordenes
-router.put('/order-products/update', adminController.putOrderProduct);
-router.post('/order-products/new',adminController.postOrderProduct);
-router.get('/order-products/:order',adminController.getOrderProducts);
-router.put('/order-products/:order',adminController.putOrderStatus);
-router.delete('/order-products/:order/:product',adminController.deleteOrderProduct);
 module.exports = router;
