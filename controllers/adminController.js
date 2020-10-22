@@ -114,7 +114,8 @@ exports.getInventoryOrder = (req, res, next) => {
 }
 
 exports.getInventoryOrders = (req, res, next) => {
-    sequelize.query('CALL getInventoryOrders()')
+    const user = req.params.user;
+    sequelize.query('CALL getInventoryOrders(:p_user)', { replacements : { p_user : user}})
         .then(rows => {
             if (rows.length === 0) { 
                 const error = new Error('No existen ordenes de inventario');
@@ -159,11 +160,7 @@ exports.postInventoryOrders = (req, res, next) => {
 exports.getCustomers = (req, res, next) => {
     sequelize.query('CALL getCustomers()')
         .then(rows => {
-            if (rows.length === 0) { // Si no encuentra un usuario la fila viene vacía
-                const error = new Error('Usuarios no encontrados');
-                error.statusCode = 404;
-                throw error;
-            }
+            
             console.log(rows);
             res.status(200).json({ customers: rows });
         })

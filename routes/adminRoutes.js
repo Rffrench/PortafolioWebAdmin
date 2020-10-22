@@ -32,7 +32,7 @@ router.delete('/recipes/:recipeId',adminController.deleteRecipe);
 
 // CRUD  Ordenes de inventario
 
-router.get('/inventoryOrders',adminController.getInventoryOrders);
+router.get('/inventoryOrders/:user',adminController.getInventoryOrders);
 router.get('/inventoryOrder/:order',adminController.getInventoryOrder);
 router.post('/inventoryOrders',adminController.postInventoryOrders);
 
