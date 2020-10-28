@@ -19,7 +19,7 @@ const adminRoutes = require('./routes/adminRoutes');
 const warehouseRoutes = require('./routes/warehouseRoutes');
 // Setting the routes
 app.use('/admin', adminRoutes);
-app.use('/warehouse',warehouseRoutes);
+app.use('/admin/warehouse',warehouseRoutes);
 
 
 app.get('/', (req, res, next) => {
