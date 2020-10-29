@@ -37,10 +37,10 @@ exports.postOrderProduct = (req, res, next) => {
 
 
 exports.deleteOrderProduct = (req, res, next) => {
-    const order = req.params.order; // se obtiene el ID de la URL dinamica /customers/:userId
-    const product = req.params.product;
+    const orderId = req.params.orderId; // se obtiene el ID de la URL dinamica /customers/:userId
+    const productId = req.params.productId;
 
-    sequelize.query('CALL deleteOrderProduct(:p_order, :p_product)', { replacements: { p_order: order, p_product:product} })        
+    sequelize.query('CALL deleteOrderProduct(:p_order, :p_product)', { replacements: { p_order: orderId, p_product:productId} })        
     .then(result => {
         console.log(result);
         res.status(201).json({ resultado: 'Producto eliminado de la orden' });
@@ -55,9 +55,9 @@ exports.deleteOrderProduct = (req, res, next) => {
 
 
 exports.getOrderProducts = (req, res, next) => {
-    const  order = req.params.order;
+    const  orderId = req.params.orderId;
  
-    sequelize.query('CALL getOrderProducts(:p_order)',{replacements: { p_order : order}})
+    sequelize.query('CALL getOrderProducts(:p_order)',{replacements: { p_order : orderId}})
         .then(rows => {
             
             console.log(rows);
@@ -73,9 +73,9 @@ exports.getOrderProducts = (req, res, next) => {
 }
 
 exports.putOrderStatus = (req, res, next) => {
-    const  order = req.params.order;
+    const  order = req.params.orderId;
  
-    sequelize.query('CALL sendToAdmin(:p_order)',{replacements: { p_order : order}})
+    sequelize.query('CALL sendToAdmin(:p_order)',{replacements: { p_order : orderId}})
     .then(result => {
         res.status(201).json({ result: 'Orden de inventario actualizada.' });
     })
@@ -90,8 +90,8 @@ exports.putOrderStatus = (req, res, next) => {
 
 // Ordenes de inventario
 exports.getInventoryOrder = (req, res, next) => {
-    const order = req.params.order;
-    sequelize.query('CALL getInventoryOrder(:p_order)',  { replacements: { p_order: order } })
+    const orderId = req.params.orderId;
+    sequelize.query('CALL getInventoryOrder(:p_order)',  { replacements: { p_order: orderId } })
         .then(result => {
             if (result.length === 0) { 
                 const error = new Error('No existe la orden');
@@ -111,8 +111,8 @@ exports.getInventoryOrder = (req, res, next) => {
 }
 
 exports.getInventoryOrders = (req, res, next) => {
-    const user = req.params.user;
-    sequelize.query('CALL getInventoryOrders(:p_user)', { replacements : { p_user : user}})
+    const userId = req.params.userId;
+    sequelize.query('CALL getInventoryOrders(:p_user)', { replacements : { p_user : userId}})
         .then(rows => {
             if (rows.length === 0) { 
                 const error = new Error('No existen ordenes de inventario');

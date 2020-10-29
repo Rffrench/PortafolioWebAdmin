@@ -14,15 +14,15 @@ router.delete('/recipes/:recipeId',warehouseController.deleteRecipe);
 
 // CRUD  Ordenes de inventario
 
-router.get('/inventoryOrders/:user',warehouseController.getInventoryOrders);
-router.get('/inventoryOrder/:order',warehouseController.getInventoryOrder);
+router.get('/inventoryOrders/:userId',warehouseController.getInventoryOrders);
+router.get('/inventoryOrder/:orderId',warehouseController.getInventoryOrder);
 router.post('/inventoryOrders',warehouseController.postInventoryOrders);
 
 
 // Productos de ordenes
 router.put('/order-products/update', warehouseController.putOrderProduct);
 router.post('/order-products/new',warehouseController.postOrderProduct);
-router.get('/order-products/:order',warehouseController.getOrderProducts);
-router.put('/order-products/:order',warehouseController.putOrderStatus);
-router.delete('/order-products/:order/:product',warehouseController.deleteOrderProduct);
+router.get('/order-products/:orderId',warehouseController.getOrderProducts);
+router.put('/order-products/:orderId',warehouseController.putOrderStatus);
+router.delete('/order-products/:orderId/:productId',warehouseController.deleteOrderProduct);
 module.exports = router;
