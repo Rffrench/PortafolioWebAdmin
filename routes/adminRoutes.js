@@ -10,6 +10,9 @@ router.get('/customers/:userId', adminController.getCustomer);
 router.put('/customers/:userId', adminController.putCustomer);
 router.delete('/customers/:userId', adminController.deleteCustomer);
 
+// Waiters >> it should have been better /users/:roleId/...
+router.get('/waiters', adminController.getWaiters);
+
 // CRUD Productos
 router.get('/products', adminController.getProducts);
 router.get('/products/:productId', adminController.getProduct);
@@ -26,9 +29,9 @@ router.delete('/tables/:tableId', adminController.deleteTable);
 
 // Ordenes de inventario
 
-router.get('/inventory-orders',adminController.getInventoryOrders);
-router.get('/inventory-orders/:orderId',adminController.getInventoryOrder);
-router.put('/inventory-orders/:orderId',adminController.updateInventoryOrder);
-router.get('/inventory-orders/products/:orderId',adminController.getInventoryOrderProducts);
+router.get('/inventory-orders', adminController.getInventoryOrders);
+router.get('/inventory-orders/:orderId', adminController.getInventoryOrder);
+router.put('/inventory-orders/:orderId', adminController.updateInventoryOrder);
+router.get('/inventory-orders/products/:orderId', adminController.getInventoryOrderProducts);
 
 module.exports = router;
