@@ -73,7 +73,7 @@ exports.getOrderProducts = (req, res, next) => {
 }
 
 exports.putOrderStatus = (req, res, next) => {
-    const  orderId = req.params.orderId;
+    const  orderId = req.body.orderId;
  
     sequelize.query('CALL sendToAdmin(:p_order)',{replacements: { p_order : orderId}})
     .then(result => {

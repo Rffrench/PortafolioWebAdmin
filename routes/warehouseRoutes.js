@@ -14,15 +14,14 @@ router.delete('/recipes/:recipeId',warehouseController.deleteRecipe);
 
 // CRUD  Ordenes de inventario
 
-router.get('/inventoryOrders/:userId',warehouseController.getInventoryOrders);
-router.get('/inventoryOrder/:orderId',warehouseController.getInventoryOrder);
-router.post('/inventoryOrders',warehouseController.postInventoryOrders);
+router.get('/inventory-orders/:userId',warehouseController.getInventoryOrders);
+router.get('/inventory-order/:orderId',warehouseController.getInventoryOrder);
+router.post('/inventory-orders',warehouseController.postInventoryOrders);
+router.put('/inventory-orders',warehouseController.putOrderStatus);
 
 
-// Productos de ordenes
-router.put('/order-products/update', warehouseController.putOrderProduct);
-router.post('/order-products/new',warehouseController.postOrderProduct);
-router.get('/order-products/:orderId',warehouseController.getOrderProducts);
-router.put('/order-products/:orderId',warehouseController.putOrderStatus);
-router.delete('/order-products/:orderId/:productId',warehouseController.deleteOrderProduct);
+router.put('/inventory-orders/products', warehouseController.putOrderProduct);
+router.post('/inventory-orders/products',warehouseController.postOrderProduct);
+router.get('/inventory-orders/products/:orderId',warehouseController.getOrderProducts);
+router.delete('/inventory-orders/products/:orderId/:productId',warehouseController.deleteOrderProduct);
 module.exports = router;
