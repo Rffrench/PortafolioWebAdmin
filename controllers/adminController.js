@@ -5,7 +5,89 @@ const Product = require('../models/productsModel');
 const Table = require('../models/tablesModel'); // must be imported or it wont work
 const Recipe = require('../models/recipesModel');
 
+// ORDENES DE INVENTARIO
 
+//Aprobar Orden de inventario
+exports.updateInventoryOrder = (req, res, next) => {
+    const  orderId = req.params.orderId;
+ 
+    sequelize.query('CALL ApproveInventoryOrder(:p_order)',{replacements: { p_order : orderId}})
+    .then(result => {
+        res.status(201).json({ result: 'Orden de inventario actualizada.' });
+    })
+    .catch(err => {
+        if (!err.statusCode) {
+            err.statusCode = 500;
+        }
+        next(err);
+    })
+}
+
+//Obtener productos relacionados con la orden
+exports.getInventoryOrderProducts = (req, res, next) => {
+    const  orderId = req.params.orderId;
+ 
+    sequelize.query('CALL getOrderProducts(:p_order)',{replacements: { p_order : orderId}})
+        .then(rows => {
+            
+            console.log(rows);
+            res.status(200).json({ OrderProducts: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
+
+
+//Traer información solo de la orden de invetario
+exports.getInventoryOrder = (req, res, next) => {
+    const orderId = req.params.orderId;
+    sequelize.query('CALL getInventoryOrder(:p_order)',  { replacements: { p_order: orderId } })
+        .then(result => {
+            if (result.length === 0) { 
+                const error = new Error('No existe la orden');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(result);
+            res.status(200).json({ inventoryOrder: result });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
+
+
+//Ordenes de inventario que tienen un estado "En espera"
+exports.getInventoryOrders = (req, res, next) => {
+    const userId = req.params.userId;
+
+    sequelize.query('CALL getInventoryOrdersAdmin()')
+        .then(rows => {
+            if (rows.length === 0) { 
+                const error = new Error('No existen ordenes de inventario');
+                error.statusCode = 404;
+                throw error;
+            }
+            console.log(rows);
+            res.status(200).json({ inventoryOrders: rows });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+
+}
 
 // CLIENTES
 
