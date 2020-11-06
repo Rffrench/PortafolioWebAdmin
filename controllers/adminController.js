@@ -71,13 +71,8 @@ exports.getInventoryOrders = (req, res, next) => {
     const userId = req.params.userId;
 
     sequelize.query('CALL getInventoryOrdersAdmin()')
-        .then(rows => {
-            if (rows.length === 0) {
-                const error = new Error('No existen ordenes de inventario');
-                error.statusCode = 404;
-                throw error;
-            }
-            console.log(rows);
+        .then(rows => {          
+            
             res.status(200).json({ inventoryOrders: rows });
         })
         .catch(err => {
