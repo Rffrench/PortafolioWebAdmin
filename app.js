@@ -17,9 +17,11 @@ app.use(cors());
 // Routes
 const adminRoutes = require('./routes/adminRoutes');
 const warehouseRoutes = require('./routes/warehouseRoutes');
+const financeRoutes = require('./routes/financeRoutes');
 // Setting the routes
 app.use('/admin', adminRoutes);
 app.use('/admin/warehouse',warehouseRoutes);
+app.use('/admin/finance',financeRoutes);
 
 
 app.get('/', (req, res, next) => {
