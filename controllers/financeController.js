@@ -33,3 +33,45 @@ exports.getDailyIncome = (req, res, next) => {
             next(err);
         })
 }
+
+exports.getCustomerOrders = (req, res, next) => {     
+
+    sequelize.query('CALL getCustomerOrders()')
+        .then(result => {
+            res.status(200).json({ customerOrders: result });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.getCustomerOrder = (req, res, next) => {     
+    orderId= req.params.orderId;
+    sequelize.query('CALL getCustomerOrder(:p_order)',{ replacements: { p_order: orderId} })
+        .then(result => {
+            res.status(200).json({ customerOrder: result });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
+exports.getOrderItems = (req, res, next) => {     
+    orderId= req.params.orderId;
+    sequelize.query('CALL getOrderItems(:p_order)',{ replacements: { p_order: orderId} })
+        .then(result => {
+            res.status(200).json({ orderItems: result });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
