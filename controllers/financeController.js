@@ -1,6 +1,23 @@
 const sequelize = require('../util/database');
 
 // Obtiene los meses en los que se registraron pagos
+
+exports.payByCash = (req, res, next) => { 
+    const orderId=req.params.orderId;   
+    
+
+    sequelize.query('CALL PayByCash(:p_order)', { replacements: { p_order: orderId} })
+        .then(result => {
+            res.status(200).json({ dailyIncome: result });
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
+}
+
 exports.getIncomeDates = (req, res, next) => {    
 
     sequelize.query('CALL getIncomeDates()')
