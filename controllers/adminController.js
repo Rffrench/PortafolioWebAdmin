@@ -220,11 +220,51 @@ exports.getDates = (req, res, next) => {
 
 }
 
+//DATES
+exports.getBestCustomers = (req, res, next) => {
+    console.log("CUSTOMERS")
+    const mydate = req.params.myDate; // se obtiene el ID de la URL dinamica /customers/:userId
+    console.log(req.params)
+    console.log(mydate.date)
+    const mymonth = mydate.split('-')[1]
+    const myyear= mydate.split('-')[0]
+    sequelize.query('CALL getBestCustomers(:p_month, :p_year)', { replacements: { p_month: mymonth, p_year: myyear } })
+        .then(rows => {
 
+            console.log(rows);
+            res.status(200).json(rows);
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
 
+}
 
+//DATES
+exports.getBestDishes = (req, res, next) => {
+    console.log("DISHES")
+    const mydate = req.params.myDate; // se obtiene el ID de la URL dinamica /customers/:userId
+    console.log(req.params)
+    console.log(mydate.date)
+    const mymonth = mydate.split('-')[1]
+    const myyear= mydate.split('-')[0]
+    sequelize.query('CALL getBestDishes(:p_month, :p_year)', { replacements: { p_month: mymonth, p_year: myyear } })
+        .then(rows => {
 
+            console.log(rows);
+            res.status(200).json(rows);
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
 
+}
 
 // PRODUCTOS
 exports.getProducts = (req, res, next) => {

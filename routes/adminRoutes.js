@@ -36,4 +36,6 @@ router.get('/inventory-orders/products/:orderId', adminController.getInventoryOr
 
 // Para reportes mensuales
 router.get('/dates', adminController.getDates);
+router.get('/bestCustomers/:myDate', adminController.getBestCustomers);
+router.get('/bestDishes/:myDate', adminController.getBestDishes);
 module.exports = router;
