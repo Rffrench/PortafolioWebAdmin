@@ -34,4 +34,6 @@ router.get('/inventory-orders/:orderId', adminController.getInventoryOrder);
 router.put('/inventory-orders/:orderId', adminController.updateInventoryOrder);
 router.get('/inventory-orders/products/:orderId', adminController.getInventoryOrderProducts);
 
+// Para reportes mensuales
+router.get('/dates', adminController.getDates);
 module.exports = router;

@@ -203,8 +203,22 @@ exports.getWaiters = (req, res, next) => {
 
 }
 
+//DATES
+exports.getDates = (req, res, next) => {
+    sequelize.query('CALL getDates()')
+        .then(rows => {
 
+            console.log(rows);
+            res.status(200).json(rows);
+        })
+        .catch(err => {
+            if (!err.statusCode) {
+                err.statusCode = 500;
+            }
+            next(err);
+        })
 
+}
 
 
 
